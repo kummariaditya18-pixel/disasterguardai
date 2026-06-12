@@ -1,9 +1,6 @@
-from utils.db import init_db
-init_db()
 import streamlit as st
 import sqlite3
 from utils.lang import translations
-from utils.db import init_db, count_reports
 
 # -----------------------------
 # PAGE CONFIG
@@ -15,12 +12,7 @@ st.set_page_config(
 )
 
 # -----------------------------
-# INIT DATABASE (GLOBAL FIX)
-# -----------------------------
-init_db()
-
-# -----------------------------
-# LANGUAGE SETUP
+# LANGUAGE SETUP (SAFE FIX)
 # -----------------------------
 if "lang" not in st.session_state:
     st.session_state.lang = "English"
@@ -45,37 +37,88 @@ if lang not in translations:
 t = translations.get(lang, translations["English"])
 
 # -----------------------------
-# UI (UNCHANGED)
+# SAFE KEYS (NO CRASH IF MISSING)
 # -----------------------------
-st.title("🌍 " + t.get("title", "Disaster Management System"))
+title = t.get("title", "Disaster Management System")
+welcome = t.get("welcome", "Welcome")
+system = t.get("system", "System Active")
+dashboard = t.get("dashboard", {})
 
-st.markdown(f"### {t.get('welcome', 'Welcome')}")
+# -----------------------------
+# UI (UNCHANGED LAYOUT)
+# -----------------------------
+st.title("🌍 " + title)
 
-st.success(t.get("system", "System Active"))
+st.markdown(f"### {welcome}")
+
+st.success(system)
 
 st.write("---")
 
 st.subheader("📊 Dashboard")
 
 # -----------------------------
-# SHARED DATABASE DATA
+# DATABASE SAFE CONNECTION
 # -----------------------------
-total, pending, rescued = count_reports()
+conn = sqlite3.connect("disasterguard.db", check_same_thread=False)
+cursor = conn.cursor()
 
 # -----------------------------
-# METRICS
+# ENSURE TABLE EXISTS
+# -----------------------------
+cursor.execute("""
+CREATE TABLE IF NOT EXISTS reports (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    tracking_id TEXT,
+    name TEXT,
+    location TEXT,
+    disaster_type TEXT,
+    severity TEXT,
+    description TEXT,
+    image_path TEXT,
+    status TEXT DEFAULT 'Pending'
+)
+""")
+
+conn.commit()
+
+# -----------------------------
+# SAFE COUNT QUERIES
+# -----------------------------
+try:
+    cursor.execute("SELECT COUNT(*) FROM reports")
+    total = cursor.fetchone()[0]
+except:
+    total = 0
+
+try:
+    cursor.execute("SELECT COUNT(*) FROM reports WHERE status='Pending'")
+    pending = cursor.fetchone()[0]
+except:
+    pending = 0
+
+try:
+    cursor.execute("SELECT COUNT(*) FROM reports WHERE status='Rescued'")
+    rescued = cursor.fetchone()[0]
+except:
+    rescued = 0
+
+conn.close()
+
+# -----------------------------
+# METRICS (UNCHANGED LAYOUT)
 # -----------------------------
 col1, col2, col3 = st.columns(3)
 
 with col1:
-    st.metric(t.get("dashboard", {}).get("total", "Total"), total)
+    st.metric(dashboard.get("total", "Total"), total)
 
 with col2:
-    st.metric(t.get("dashboard", {}).get("pending", "Pending"), pending)
+    st.metric(dashboard.get("pending", "Pending"), pending)
 
 with col3:
-    st.metric(t.get("dashboard", {}).get("rescued", "Rescued"), rescued)
+    st.metric(dashboard.get("rescued", "Rescued"), rescued)
 
 st.write("---")
 
-st.info(t.get("loaded", "Dashboard Loaded 🚀"))
+st.info(system + " 🚀")

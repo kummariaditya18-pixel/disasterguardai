@@ -1,13 +1,24 @@
 import streamlit as st
 import sqlite3
-
 from utils.lang import translations
 
+# ---------------- LANGUAGE ----------------
 lang = st.session_state.get("lang", "English")
 t = translations.get(lang, translations["English"])
 
-st.title("🚑 " + t["menu"]["tracking"])
+menu = t.get("menu", {})
+form = t.get("form", {})
 
+def tr_menu(key, fallback):
+    return menu.get(key, fallback)
+
+def tr_form(key, fallback):
+    return form.get(key, fallback)
+
+# ---------------- TITLE (UNCHANGED LAYOUT) ----------------
+st.title("🚑 " + tr_menu("tracking", "Rescue Tracking"))
+
+# ---------------- INPUT ----------------
 track_id = st.text_input("Enter Tracking ID")
 
 # ---------------- SEARCH ----------------
@@ -22,12 +33,11 @@ if st.button("Search"):
     )
 
     result = cursor.fetchone()
-
     conn.close()
 
     if result:
 
-        st.success(t["system"])
+        st.success(t.get("system", "System Active"))
 
         st.write("🆔", result[0])
         st.write("👤", result[1])
@@ -37,30 +47,34 @@ if st.button("Search"):
         st.write("📝", result[5])
         st.write("⏰", result[7])
 
-        # ---------------- CURRENT STATUS ----------------
+        # ---------------- STATUS ----------------
         status = result[8] if len(result) > 8 else "Pending"
 
-        st.markdown("### 🚦 Current Status")
+        st.markdown("### 🚦 " + tr_menu("status", "Current Status"))
 
         if status == "Pending":
-            st.warning("🟡 Pending")
+            st.warning("🟡 " + tr_form("low", "Pending"))
         elif status == "In Progress":
-            st.info("🔵 In Progress")
+            st.info("🔵 " + tr_form("medium", "In Progress"))
         elif status == "Solved":
-            st.success("🟢 Solved")
+            st.success("🟢 " + tr_form("high", "Solved"))
         else:
             st.error("Unknown")
 
-        # ---------------- MANUAL UPDATE (ONLY HERE) ----------------
+        # ---------------- UPDATE ----------------
         st.markdown("---")
-        st.subheader("✏️ Update Status (Manual)")
+        st.subheader("✏️ " + tr_menu("update", "Update Status"))
 
         new_status = st.selectbox(
-            "Change Status",
-            ["Pending", "In Progress", "Solved"]
+            tr_menu("status", "Change Status"),
+            [
+                "Pending",
+                "In Progress",
+                "Solved"
+            ]
         )
 
-        if st.button("Update Status"):
+        if st.button(tr_menu("update_btn", "Update Status")):
 
             conn = sqlite3.connect("disasterguard.db", check_same_thread=False)
             cursor = conn.cursor()
@@ -74,8 +88,8 @@ if st.button("Search"):
             conn.commit()
             conn.close()
 
-            st.success("Status updated successfully!")
+            st.success(tr_menu("updated", "Status updated successfully!"))
             st.rerun()
 
     else:
-        st.error("Not found")
+        st.error(tr_menu("not_found", "Not found"))

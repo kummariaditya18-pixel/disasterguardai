@@ -1,76 +1,144 @@
+# utils/lang.py
+
 translations = {
     "English": {
-        "title": "Disaster Management System",
+        "title": "DisasterGuard AI",
         "welcome": "Welcome to DisasterGuard AI",
-        "system": "Emergency System Active",
-
-        "menu": {
-            "report": "Report Disaster",
-            "view_reports": "View Reports",
-            "reports": "View Reports",
-            "map": "Live Map",
-            "tracking": "Rescue Tracking",
-            "shelters": "Shelters",
-            "volunteers": "Volunteer List",
-            "vol_list": "Volunteer List",
-            "assistant": "AI Assistant",
-            "admin": "Admin Panel"
-        },
+        "system": "System Active",
 
         "dashboard": {
             "total": "Total Reports",
             "pending": "Pending",
             "rescued": "Rescued"
+        },
+
+        "menu": {
+            "report": "Report Disaster",
+            "map": "Live Map",
+            "tracking": "Rescue Tracking",
+            "shelters": "Shelters",
+            "volunteers": "Volunteers",
+            "assistant": "AI Assistant",
+            "admin": "Admin Panel",
+            "vol_list": "Volunteer List",
+            "reports": "View Reports"
+        },
+
+        "form": {
+            "report_title": "Report Disaster",
+
+            "name": "Name",
+            "location": "Location",
+            "disaster_type": "Disaster Type",
+            "severity": "Severity",
+            "description": "Description",
+            "upload": "Upload Image (Optional)",
+            "submit": "Submit Report",
+
+            "flood": "Flood 🌊",
+            "earthquake": "Earthquake 🌍",
+            "storm": "Storm 🌪️",
+            "fire": "Fire 🔥",
+
+            "low": "Low 🟢",
+            "medium": "Medium 🟡",
+            "high": "High 🔴",
+
+            "success": "Report Submitted Successfully"
         }
     },
 
     "Hindi": {
         "title": "आपदा प्रबंधन प्रणाली",
-        "welcome": "डिजास्टर गार्ड AI में आपका स्वागत है",
-        "system": "आपातकालीन प्रणाली सक्रिय",
-
-        "menu": {
-            "report": "आपदा रिपोर्ट करें",
-            "view_reports": "रिपोर्ट देखें",
-            "reports": "रिपोर्ट देखें",
-            "map": "लाइव मैप",
-            "tracking": "रेस्क्यू ट्रैकिंग",
-            "shelters": "आश्रय स्थल",
-            "volunteers": "स्वयंसेवक सूची",
-            "vol_list": "स्वयंसेवक सूची",
-            "assistant": "AI सहायक",
-            "admin": "एडमिन पैनल"
-        },
+        "welcome": "DisasterGuard AI में आपका स्वागत है",
+        "system": "सिस्टम सक्रिय",
 
         "dashboard": {
             "total": "कुल रिपोर्ट",
             "pending": "लंबित",
-            "rescued": "बचाए गए"
+            "rescued": "बचाया गया"
+        },
+
+        "menu": {
+            "report": "आपदा रिपोर्ट करें",
+            "map": "लाइव मानचित्र",
+            "tracking": "बचाव ट्रैकिंग",
+            "shelters": "आश्रय",
+            "volunteers": "स्वयंसेवक",
+            "assistant": "AI सहायक",
+            "admin": "एडमिन पैनल",
+            "vol_list": "स्वयंसेवक सूची",
+            "reports": "रिपोर्ट देखें"
+        },
+
+        "form": {
+            "report_title": "आपदा रिपोर्ट करें",
+
+            "name": "नाम",
+            "location": "स्थान",
+            "disaster_type": "आपदा प्रकार",
+            "severity": "गंभीरता",
+            "description": "विवरण",
+            "upload": "छवि अपलोड करें (वैकल्पिक)",
+            "submit": "रिपोर्ट जमा करें",
+
+            "flood": "बाढ़ 🌊",
+            "earthquake": "भूकंप 🌍",
+            "storm": "तूफान 🌪️",
+            "fire": "आग 🔥",
+
+            "low": "कम 🟢",
+            "medium": "मध्यम 🟡",
+            "high": "उच्च 🔴",
+
+            "success": "रिपोर्ट सफलतापूर्वक भेजी गई"
         }
     },
 
     "Telugu": {
         "title": "విపత్తు నిర్వహణ వ్యవస్థ",
-        "welcome": "డిజాస్టర్ గార్డ్ AIకి స్వాగతం",
-        "system": "అత్యవసర వ్యవస్థ సక్రియంగా ఉంది",
-
-        "menu": {
-            "report": "విపత్తు నివేదించండి",
-            "view_reports": "నివేదికలు చూడండి",
-            "reports": "నివేదికలు చూడండి",
-            "map": "లైవ్ మ్యాప్",
-            "tracking": "రక్షణ ట్రాకింగ్",
-            "shelters": "ఆశ్రయ కేంద్రాలు",
-            "volunteers": "స్వచ్ఛంద సేవకులు",
-            "vol_list": "స్వచ్ఛంద జాబితా",
-            "assistant": "AI సహాయకుడు",
-            "admin": "అడ్మిన్ ప్యానెల్"
-        },
+        "welcome": "DisasterGuard AIకి స్వాగతం",
+        "system": "సిస్టమ్ సక్రియంగా ఉంది",
 
         "dashboard": {
             "total": "మొత్తం నివేదికలు",
             "pending": "పెండింగ్",
             "rescued": "రక్షించబడినవి"
+        },
+
+        "menu": {
+            "report": "విపత్తు నివేదించండి",
+            "map": "లైవ్ మ్యాప్",
+            "tracking": "రక్షణ ట్రాకింగ్",
+            "shelters": "ఆశ్రయాలు",
+            "volunteers": "స్వచ్ఛంద సేవకులు",
+            "assistant": "AI సహాయకుడు",
+            "admin": "అడ్మిన్ ప్యానెల్",
+            "vol_list": "స్వచ్ఛంద జాబితా",
+            "reports": "నివేదికలు చూడండి"
+        },
+
+        "form": {
+            "report_title": "విపత్తు నివేదించండి",
+
+            "name": "పేరు",
+            "location": "స్థానం",
+            "disaster_type": "విపత్తు రకం",
+            "severity": "తీవ్రత",
+            "description": "వివరణ",
+            "upload": "చిత్రం అప్‌లోడ్ చేయండి (ఐచ్ఛికం)",
+            "submit": "నివేదిక పంపండి",
+
+            "flood": "వరద 🌊",
+            "earthquake": "భూకంపం 🌍",
+            "storm": "తుఫాను 🌪️",
+            "fire": "అగ్ని 🔥",
+
+            "low": "తక్కువ 🟢",
+            "medium": "మధ్యస్థ 🟡",
+            "high": "ఎక్కువ 🔴",
+
+            "success": "నివేదిక విజయవంతంగా పంపబడింది"
         }
     }
 }
