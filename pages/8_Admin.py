@@ -2,33 +2,49 @@ import streamlit as st
 import pandas as pd
 import sqlite3
 
+from utils.lang import translations
 from utils.db import init_db, fetch_reports, get_conn
 from utils.auth import login, logout, is_admin
 
+# ---------------- INIT DB ----------------
 init_db()
 
-# ---------------- LOGIN PAGE (BLOCK ACCESS) ----------------
+# ---------------- LANGUAGE SAFE FIX ----------------
+lang = st.session_state.get("lang", "English")
+
+if lang not in translations:
+    lang = "English"
+
+t = translations.get(lang, translations["English"])
+menu = t.get("menu", {})
+
+def tr(key, fallback):
+    return menu.get(key, fallback)
+
+# ---------------- LOGIN SYSTEM ----------------
 if not is_admin():
-    st.title("🔐 Admin Login")
+    st.title("🔐 " + tr("admin", "Admin Panel"))
 
-    username = st.text_input("Username")
-    password = st.text_input("Password", type="password")
+    st.write("Login to access admin panel")
 
-    if st.button("Login"):
+    username = st.text_input(tr("username", "Username"))
+    password = st.text_input(tr("password", "Password"), type="password")
+
+    if st.button(tr("login", "Login")):
         if login(username, password):
             st.success("Login successful")
             st.rerun()
         else:
             st.error("Invalid credentials")
 
-    st.stop()  # 🔥 BLOCK EVERYTHING BELOW
+    st.stop()
 
 # ---------------- ADMIN DASHBOARD ----------------
-st.title("⚙️ Admin Panel")
+st.title("⚙️ " + tr("admin", "Admin Panel"))
 
-st.success(f"Welcome Admin: {st.session_state.get('admin_user')}")
+st.success(f"{tr('welcome', 'Welcome')} {st.session_state.get('admin_user')}")
 
-if st.button("Logout"):
+if st.button(tr("logout", "Logout")):
     logout()
     st.rerun()
 
@@ -51,31 +67,40 @@ columns = [
 
 df = pd.DataFrame(rows, columns=columns)
 
-st.subheader("📋 All Disaster Reports")
+# ---------------- SHOW REPORTS ----------------
+st.subheader(tr("reports", "Disaster Reports"))
 
 if df.empty:
-    st.warning("No reports found")
+    st.warning(tr("no_data", "No reports found"))
 else:
+    st.success(f"{tr('total', 'Total')}: {len(df)}")
     st.dataframe(df, use_container_width=True)
 
-# ---------------- STATUS UPDATE (ADMIN ONLY) ----------------
 st.write("---")
-st.subheader("🔄 Update Report Status")
+
+# ---------------- STATUS UPDATE ----------------
+st.subheader(tr("update", "Update Report Status"))
 
 conn = get_conn()
 cursor = conn.cursor()
 
-report_id = st.text_input("Enter Report ID")
-new_status = st.selectbox("Change Status", ["Pending", "Rescued"])
+report_id = st.text_input(tr("report_id", "Report ID"))
 
-if st.button("Update Status"):
+status_options = [
+    tr("pending", "Pending"),
+    tr("rescued", "Rescued")
+]
+
+new_status = st.selectbox(tr("status", "Status"), status_options)
+
+if st.button(tr("update_btn", "Update")):
     if report_id:
         cursor.execute(
             "UPDATE reports SET status=? WHERE id=?",
             (new_status, report_id)
         )
         conn.commit()
-        st.success("Status updated successfully")
+        st.success(tr("updated", "Status updated successfully"))
         st.rerun()
 
 conn.close()
