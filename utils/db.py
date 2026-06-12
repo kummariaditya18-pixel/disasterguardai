@@ -2,9 +2,11 @@ import sqlite3
 
 DB_NAME = "disasterguard.db"
 
-# ---------------- CONNECT ----------------
+
+# ---------------- CONNECTION ----------------
 def get_conn():
     return sqlite3.connect(DB_NAME, check_same_thread=False)
+
 
 # ---------------- INIT DB ----------------
 def init_db():
@@ -28,37 +30,26 @@ def init_db():
     conn.commit()
     conn.close()
 
-# ---------------- ADD REPORT (REQUIRED BY YOUR PAGE) ----------------
+
+# ---------------- ADD REPORT ----------------
 def add_report(tracking_id, name, location, disaster_type, severity, description, image_path):
     conn = get_conn()
     cur = conn.cursor()
 
     cur.execute("""
         INSERT INTO reports (
-            tracking_id,
-            name,
-            location,
-            disaster_type,
-            severity,
-            description,
-            image_path,
-            status
+            tracking_id, name, location,
+            disaster_type, severity, description,
+            image_path, status
         )
         VALUES (?, ?, ?, ?, ?, ?, ?, 'Pending')
-    """, (
-        tracking_id,
-        name,
-        location,
-        disaster_type,
-        severity,
-        description,
-        image_path
-    ))
+    """, (tracking_id, name, location, disaster_type, severity, description, image_path))
 
     conn.commit()
     conn.close()
 
-# ---------------- FETCH REPORTS ----------------
+
+# ---------------- FETCH ALL REPORTS ----------------
 def fetch_reports():
     conn = get_conn()
     cur = conn.cursor()
@@ -69,7 +60,8 @@ def fetch_reports():
     conn.close()
     return rows
 
-# ---------------- GET REPORT ----------------
+
+# ---------------- GET SINGLE REPORT ----------------
 def get_report(tracking_id):
     conn = get_conn()
     cur = conn.cursor()
@@ -80,16 +72,35 @@ def get_report(tracking_id):
     conn.close()
     return row
 
+
 # ---------------- UPDATE STATUS ----------------
 def update_status(report_id, status):
     conn = get_conn()
     cur = conn.cursor()
 
-    cur.execute("""
-        UPDATE reports
-        SET status=?
-        WHERE id=?
-    """, (status, report_id))
+    cur.execute(
+        "UPDATE reports SET status=? WHERE id=?",
+        (status, report_id)
+    )
 
     conn.commit()
     conn.close()
+
+
+# ---------------- COUNT REPORTS (FIXED ERROR) ----------------
+def count_reports():
+    conn = get_conn()
+    cur = conn.cursor()
+
+    cur.execute("SELECT COUNT(*) FROM reports")
+    total = cur.fetchone()[0]
+
+    cur.execute("SELECT COUNT(*) FROM reports WHERE status='Pending'")
+    pending = cur.fetchone()[0]
+
+    cur.execute("SELECT COUNT(*) FROM reports WHERE status='Rescued'")
+    rescued = cur.fetchone()[0]
+
+    conn.close()
+
+    return total, pending, rescued

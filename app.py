@@ -2,112 +2,85 @@ import streamlit as st
 import sqlite3
 from utils.lang import translations
 
-# -----------------------------
-# PAGE CONFIG
-# -----------------------------
+# ---------------- PAGE CONFIG ----------------
 st.set_page_config(
     page_title="DisasterGuard AI",
     page_icon="🌍",
     layout="wide"
 )
 
-# -----------------------------
-# LANGUAGE SETUP (SAFE FIX)
-# -----------------------------
+# ---------------- LANGUAGE SELECTOR ----------------
 if "lang" not in st.session_state:
     st.session_state.lang = "English"
 
-lang_map = ["English", "Hindi", "Telugu"]
+lang_options = list(translations.keys())
 
-selected = st.sidebar.selectbox(
-    "🌐 Choose Language",
-    lang_map,
-    index=lang_map.index(st.session_state.lang)
+selected_lang = st.sidebar.selectbox(
+    "🌐 Language",
+    lang_options,
+    index=lang_options.index(st.session_state.lang)
 )
 
-if selected != st.session_state.lang:
-    st.session_state.lang = selected
+if selected_lang != st.session_state.lang:
+    st.session_state.lang = selected_lang
     st.rerun()
 
-lang = st.session_state.get("lang", "English")
-
-if lang not in translations:
-    lang = "English"
-
+lang = st.session_state.lang
 t = translations.get(lang, translations["English"])
 
-# -----------------------------
-# SAFE KEYS (NO CRASH IF MISSING)
-# -----------------------------
-title = t.get("title", "Disaster Management System")
-welcome = t.get("welcome", "Welcome")
-system = t.get("system", "System Active")
-dashboard = t.get("dashboard", {})
 
-# -----------------------------
-# UI (UNCHANGED LAYOUT)
-# -----------------------------
-st.title("🌍 " + title)
+# ---------------- SAFE DB ----------------
+def get_counts():
+    conn = sqlite3.connect("disasterguard.db", check_same_thread=False)
+    cursor = conn.cursor()
 
-st.markdown(f"### {welcome}")
+    cursor.execute("""
+        CREATE TABLE IF NOT EXISTS reports (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            tracking_id TEXT,
+            name TEXT,
+            location TEXT,
+            disaster_type TEXT,
+            severity TEXT,
+            description TEXT,
+            image_path TEXT,
+            status TEXT DEFAULT 'Pending'
+        )
+    """)
 
-st.success(system)
+    conn.commit()
+
+    cursor.execute("SELECT COUNT(*) FROM reports")
+    total = cursor.fetchone()[0]
+
+    cursor.execute("SELECT COUNT(*) FROM reports WHERE status='Pending'")
+    pending = cursor.fetchone()[0]
+
+    cursor.execute("SELECT COUNT(*) FROM reports WHERE status='Rescued'")
+    rescued = cursor.fetchone()[0]
+
+    conn.close()
+
+    return total, pending, rescued
+
+
+# ---------------- UI ----------------
+st.title("🌍 " + t.get("title", "DisasterGuard AI"))
+
+st.markdown(f"### {t.get('welcome', 'Welcome')}")
+
+st.success(t.get("system", "System Active"))
 
 st.write("---")
 
-st.subheader("📊 Dashboard")
+# ---------------- DASHBOARD TITLE FIX ----------------
+st.subheader("📊 " + t.get("dashboard_title", "Dashboard"))
 
-# -----------------------------
-# DATABASE SAFE CONNECTION
-# -----------------------------
-conn = sqlite3.connect("disasterguard.db", check_same_thread=False)
-cursor = conn.cursor()
+# ---------------- DATA ----------------
+total, pending, rescued = get_counts()
 
-# -----------------------------
-# ENSURE TABLE EXISTS
-# -----------------------------
-cursor.execute("""
-CREATE TABLE IF NOT EXISTS reports (
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
-    tracking_id TEXT,
-    name TEXT,
-    location TEXT,
-    disaster_type TEXT,
-    severity TEXT,
-    description TEXT,
-    image_path TEXT,
-    status TEXT DEFAULT 'Pending'
-)
-""")
+dashboard = t.get("dashboard", {})
 
-conn.commit()
-
-# -----------------------------
-# SAFE COUNT QUERIES
-# -----------------------------
-try:
-    cursor.execute("SELECT COUNT(*) FROM reports")
-    total = cursor.fetchone()[0]
-except:
-    total = 0
-
-try:
-    cursor.execute("SELECT COUNT(*) FROM reports WHERE status='Pending'")
-    pending = cursor.fetchone()[0]
-except:
-    pending = 0
-
-try:
-    cursor.execute("SELECT COUNT(*) FROM reports WHERE status='Rescued'")
-    rescued = cursor.fetchone()[0]
-except:
-    rescued = 0
-
-conn.close()
-
-# -----------------------------
-# METRICS (UNCHANGED LAYOUT)
-# -----------------------------
 col1, col2, col3 = st.columns(3)
 
 with col1:
@@ -121,4 +94,4 @@ with col3:
 
 st.write("---")
 
-st.info(system + " 🚀")
+st.info(t.get("loaded", "DisasterGuard AI Dashboard Loaded Successfully 🚀"))
