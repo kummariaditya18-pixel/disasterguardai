@@ -41,24 +41,46 @@ if lang not in translations:
 t = translations[lang]
 
 # -----------------------------
-# UI (UNCHANGED)
+# UI (FIXED SAFELY - NO LAYOUT CHANGE)
 # -----------------------------
-st.title("🌍 " + t["title"])
+st.title("🌍 " + t.get("title", "Disaster Management System"))
 
-st.markdown(f"### {t['welcome']}")
+st.markdown(f"### {t.get('welcome', 'Welcome')}")
 
-st.success(t["system"])
+st.success(t.get("system", "System Active"))
 
 st.write("---")
 
 st.subheader("📊 Dashboard")
 
 # -----------------------------
-# FIX ONLY HERE (DATABASE CONNECT)
+# SAFE DATABASE CONNECT
 # -----------------------------
 conn = sqlite3.connect("disasterguard.db", check_same_thread=False)
 cursor = conn.cursor()
 
+# -----------------------------
+# SAFE TABLE HANDLING (NO CRASH)
+# -----------------------------
+cursor.execute("""
+CREATE TABLE IF NOT EXISTS reports (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    tracking_id TEXT,
+    name TEXT,
+    location TEXT,
+    disaster_type TEXT,
+    severity TEXT,
+    description TEXT,
+    image_path TEXT,
+    status TEXT DEFAULT 'Pending'
+)
+""")
+
+conn.commit()
+
+# -----------------------------
+# SAFE QUERIES (NO CRASH)
+# -----------------------------
 cursor.execute("SELECT COUNT(*) FROM reports")
 total = cursor.fetchone()[0]
 
@@ -76,14 +98,14 @@ conn.close()
 col1, col2, col3 = st.columns(3)
 
 with col1:
-    st.metric(t["dashboard"]["total"], total)
+    st.metric(t.get("dashboard", {}).get("total", "Total"), total)
 
 with col2:
-    st.metric(t["dashboard"]["pending"], pending)
+    st.metric(t.get("dashboard", {}).get("pending", "Pending"), pending)
 
 with col3:
-    st.metric(t["dashboard"]["rescued"], rescued)
+    st.metric(t.get("dashboard", {}).get("rescued", "Rescued"), rescued)
 
 st.write("---")
 
-st.info("DisasterGuard AI Dashboard Loaded Successfully 🚀")
+st.info(t.get("loaded", "DisasterGuard AI Dashboard Loaded Successfully 🚀"))
