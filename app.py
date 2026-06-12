@@ -1,10 +1,25 @@
 import streamlit as st
 import sqlite3
 from utils.lang import translations
+from utils.db import init_db, count_reports
 
-st.set_page_config(page_title="DisasterGuard AI", page_icon="🌍", layout="wide")
+# -----------------------------
+# PAGE CONFIG
+# -----------------------------
+st.set_page_config(
+    page_title="DisasterGuard AI",
+    page_icon="🌍",
+    layout="wide"
+)
 
-# ---------------- LANGUAGE ----------------
+# -----------------------------
+# INIT DATABASE (GLOBAL FIX)
+# -----------------------------
+init_db()
+
+# -----------------------------
+# LANGUAGE SETUP
+# -----------------------------
 if "lang" not in st.session_state:
     st.session_state.lang = "English"
 
@@ -21,66 +36,44 @@ if selected != st.session_state.lang:
     st.rerun()
 
 lang = st.session_state.get("lang", "English")
+
+if lang not in translations:
+    lang = "English"
+
 t = translations.get(lang, translations["English"])
 
-# ---------------- DB RESET FIX (IMPORTANT) ----------------
-conn = sqlite3.connect("disasterguard.db", check_same_thread=False)
-cursor = conn.cursor()
-
-# 🔥 FIX: DROP OLD BROKEN TABLE
-cursor.execute("DROP TABLE IF EXISTS reports")
-
-# 🔥 CREATE NEW CORRECT TABLE
-cursor.execute("""
-CREATE TABLE reports (
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
-    tracking_id TEXT,
-    name TEXT,
-    location TEXT,
-    disaster_type TEXT,
-    severity TEXT,
-    description TEXT,
-    image_path TEXT,
-    status TEXT DEFAULT 'Pending'
-)
-""")
-
-conn.commit()
-conn.close()
-
-# ---------------- UI ----------------
+# -----------------------------
+# UI (UNCHANGED)
+# -----------------------------
 st.title("🌍 " + t.get("title", "Disaster Management System"))
+
 st.markdown(f"### {t.get('welcome', 'Welcome')}")
+
 st.success(t.get("system", "System Active"))
 
 st.write("---")
+
 st.subheader("📊 Dashboard")
 
-# ---------------- DB READ ----------------
-conn = sqlite3.connect("disasterguard.db", check_same_thread=False)
-cursor = conn.cursor()
+# -----------------------------
+# SHARED DATABASE DATA
+# -----------------------------
+total, pending, rescued = count_reports()
 
-cursor.execute("SELECT COUNT(*) FROM reports")
-total = cursor.fetchone()[0]
-
-cursor.execute("SELECT COUNT(*) FROM reports WHERE status='Pending'")
-pending = cursor.fetchone()[0]
-
-cursor.execute("SELECT COUNT(*) FROM reports WHERE status='Rescued'")
-rescued = cursor.fetchone()[0]
-
-conn.close()
-
+# -----------------------------
+# METRICS
+# -----------------------------
 col1, col2, col3 = st.columns(3)
 
 with col1:
-    st.metric("Total", total)
+    st.metric(t.get("dashboard", {}).get("total", "Total"), total)
 
 with col2:
-    st.metric("Pending", pending)
+    st.metric(t.get("dashboard", {}).get("pending", "Pending"), pending)
 
 with col3:
-    st.metric("Rescued", rescued)
+    st.metric(t.get("dashboard", {}).get("rescued", "Rescued"), rescued)
 
 st.write("---")
-st.info("Dashboard Loaded 🚀")
+
+st.info(t.get("loaded", "Dashboard Loaded 🚀"))
