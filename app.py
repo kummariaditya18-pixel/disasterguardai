@@ -1,3 +1,5 @@
+from utils.db import init_db
+init_db()
 import streamlit as st
 import sqlite3
 from utils.lang import translations
