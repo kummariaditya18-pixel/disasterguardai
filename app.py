@@ -12,36 +12,34 @@ st.set_page_config(
 )
 
 # -----------------------------
-# LANGUAGE SETUP
+# LANGUAGE SETUP (FIXED SYNC)
 # -----------------------------
 if "lang" not in st.session_state:
     st.session_state.lang = "English"
 
-lang_map = {
-    "English": "English",
-    "Hindi": "Hindi",
-    "Telugu": "Telugu"
-}
+lang_map = ["English", "Hindi", "Telugu"]
 
 selected = st.sidebar.selectbox(
     "🌐 Choose Language",
-    list(lang_map.keys()),
-    index=list(lang_map.keys()).index(st.session_state.lang)
+    lang_map,
+    index=lang_map.index(st.session_state.lang)
 )
 
+# 🔥 FORCE SYNC PROPERLY
 if selected != st.session_state.lang:
     st.session_state.lang = selected
     st.rerun()
 
-lang = st.session_state.lang
+# ALWAYS READ CURRENT VALUE
+lang = st.session_state.get("lang", "English")
 
 if lang not in translations:
     lang = "English"
 
-t = translations[lang]
+t = translations.get(lang, translations["English"])
 
 # -----------------------------
-# UI (FIXED SAFELY - NO LAYOUT CHANGE)
+# UI (UNCHANGED)
 # -----------------------------
 st.title("🌍 " + t.get("title", "Disaster Management System"))
 
@@ -59,9 +57,6 @@ st.subheader("📊 Dashboard")
 conn = sqlite3.connect("disasterguard.db", check_same_thread=False)
 cursor = conn.cursor()
 
-# -----------------------------
-# SAFE TABLE HANDLING (NO CRASH)
-# -----------------------------
 cursor.execute("""
 CREATE TABLE IF NOT EXISTS reports (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -78,9 +73,6 @@ CREATE TABLE IF NOT EXISTS reports (
 
 conn.commit()
 
-# -----------------------------
-# SAFE QUERIES (NO CRASH)
-# -----------------------------
 cursor.execute("SELECT COUNT(*) FROM reports")
 total = cursor.fetchone()[0]
 
@@ -93,7 +85,7 @@ rescued = cursor.fetchone()[0]
 conn.close()
 
 # -----------------------------
-# UI METRICS (UNCHANGED STYLE)
+# UI METRICS (UNCHANGED)
 # -----------------------------
 col1, col2, col3 = st.columns(3)
 
