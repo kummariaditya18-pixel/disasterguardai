@@ -1,58 +1,49 @@
-# utils/lang.py
-
 translations = {
     "English": {
+        "title": "Disaster Management System",
+        "welcome": "Welcome to DisasterGuard AI",
+        "system": "Emergency Response System Active",
+
         "menu": {
             "report": "Report Disaster",
-            "view_reports": "View Reports"
-        },
-
-        # ---------------- REPORT PAGE ----------------
-        "welcome": "Report emergencies quickly and help others stay safe.",
-        
-        # ---------------- VIEW REPORT PAGE ----------------
-        "no_reports": "⚠️ No disaster reports found.",
-        "total_reports": "Total Reports: ",
-        "filter_reports": "Filter Reports",
-        "filter_label": "Filter by Disaster Type",
-        "db_error": "❌ Database Error: ",
-        "debug_title": "🔍 Debug Table Structure",
-        "no_table": "No table structure found"
+            "view_reports": "View Reports",
+            "map": "Live Map",
+            "tracking": "Rescue Tracking",
+            "shelters": "Shelters",
+            "volunteers": "Volunteers",
+            "assistant": "AI Assistant"
+        }
     },
 
-    # ================= TELUGU =================
     "Telugu": {
+        "title": "విపత్తు నిర్వహణ వ్యవస్థ",
+        "welcome": "డిజాస్టర్ గార్డ్ AIకి స్వాగతం",
+        "system": "అత్యవసర స్పందన వ్యవస్థ సక్రియంగా ఉంది",
+
         "menu": {
             "report": "విపత్తు నివేదించండి",
-            "view_reports": "నివేదికలు చూడండి"
-        },
-
-        "welcome": "అత్యవసర పరిస్థితులను త్వరగా నివేదించండి.",
-
-        "no_reports": "⚠️ ఎటువంటి విపత్తు నివేదికలు లేవు.",
-        "total_reports": "మొత్తం నివేదికలు: ",
-        "filter_reports": "ఫిల్టర్ నివేదికలు",
-        "filter_label": "విపత్తు రకం ద్వారా ఫిల్టర్ చేయండి",
-        "db_error": "❌ డేటాబేస్ లోపం: ",
-        "debug_title": "🔍 డేటాబేస్ నిర్మాణం",
-        "no_table": "టేబుల్ నిర్మాణం లేదు"
+            "view_reports": "నివేదికలు చూడండి",
+            "map": "ప్రత్యక్ష పటం",
+            "tracking": "రక్షణ ట్రాకింగ్",
+            "shelters": "ఆశ్రయ కేంద్రాలు",
+            "volunteers": "స్వచ్ఛంద సేవకులు",
+            "assistant": "AI సహాయకుడు"
+        }
     },
 
-    # ================= HINDI =================
     "Hindi": {
+        "title": "आपदा प्रबंधन प्रणाली",
+        "welcome": "डिजास्टर गार्ड AI में आपका स्वागत है",
+        "system": "आपातकालीन प्रतिक्रिया प्रणाली सक्रिय",
+
         "menu": {
             "report": "आपदा रिपोर्ट करें",
-            "view_reports": "रिपोर्ट देखें"
-        },
-
-        "welcome": "आपातकालीन स्थिति को जल्दी रिपोर्ट करें।",
-
-        "no_reports": "⚠️ कोई आपदा रिपोर्ट नहीं मिली।",
-        "total_reports": "कुल रिपोर्ट: ",
-        "filter_reports": "रिपोर्ट फ़िल्टर करें",
-        "filter_label": "आपदा प्रकार के अनुसार फ़िल्टर करें",
-        "db_error": "❌ डेटाबेस त्रुटि: ",
-        "debug_title": "🔍 टेबल संरचना",
-        "no_table": "कोई टेबल संरचना नहीं मिली"
+            "view_reports": "रिपोर्ट देखें",
+            "map": "लाइव मैप",
+            "tracking": "रेस्क्यू ट्रैकिंग",
+            "shelters": "आश्रय स्थल",
+            "volunteers": "स्वयंसेवक",
+            "assistant": "AI सहायक"
+        }
     }
 }
