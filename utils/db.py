@@ -2,7 +2,7 @@ import sqlite3
 
 DB_NAME = "disasterguard.db"
 
-# ---------------- CONNECTION ----------------
+# ---------------- CONNECT ----------------
 def get_conn():
     return sqlite3.connect(DB_NAME, check_same_thread=False)
 
@@ -28,19 +28,32 @@ def init_db():
     conn.commit()
     conn.close()
 
-# ---------------- ADD REPORT ----------------
+# ---------------- ADD REPORT (REQUIRED BY YOUR PAGE) ----------------
 def add_report(tracking_id, name, location, disaster_type, severity, description, image_path):
     conn = get_conn()
     cur = conn.cursor()
 
     cur.execute("""
         INSERT INTO reports (
-            tracking_id, name, location,
-            disaster_type, severity, description,
-            image_path, status
+            tracking_id,
+            name,
+            location,
+            disaster_type,
+            severity,
+            description,
+            image_path,
+            status
         )
         VALUES (?, ?, ?, ?, ?, ?, ?, 'Pending')
-    """, (tracking_id, name, location, disaster_type, severity, description, image_path))
+    """, (
+        tracking_id,
+        name,
+        location,
+        disaster_type,
+        severity,
+        description,
+        image_path
+    ))
 
     conn.commit()
     conn.close()
@@ -80,21 +93,3 @@ def update_status(report_id, status):
 
     conn.commit()
     conn.close()
-
-# ---------------- FIX: COUNT REPORTS (MISSING FUNCTION) ----------------
-def count_reports():
-    conn = get_conn()
-    cur = conn.cursor()
-
-    cur.execute("SELECT COUNT(*) FROM reports")
-    total = cur.fetchone()[0]
-
-    cur.execute("SELECT COUNT(*) FROM reports WHERE status='Pending'")
-    pending = cur.fetchone()[0]
-
-    cur.execute("SELECT COUNT(*) FROM reports WHERE status='Rescued'")
-    rescued = cur.fetchone()[0]
-
-    conn.close()
-
-    return total, pending, rescued
