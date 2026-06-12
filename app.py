@@ -1,4 +1,5 @@
 import streamlit as st
+import sqlite3
 from utils.lang import translations
 
 # -----------------------------
@@ -40,7 +41,7 @@ if lang not in translations:
 t = translations[lang]
 
 # -----------------------------
-# UI
+# UI (UNCHANGED)
 # -----------------------------
 st.title("🌍 " + t["title"])
 
@@ -52,16 +53,36 @@ st.write("---")
 
 st.subheader("📊 Dashboard")
 
+# -----------------------------
+# FIX ONLY HERE (DATABASE CONNECT)
+# -----------------------------
+conn = sqlite3.connect("disasterguard.db", check_same_thread=False)
+cursor = conn.cursor()
+
+cursor.execute("SELECT COUNT(*) FROM reports")
+total = cursor.fetchone()[0]
+
+cursor.execute("SELECT COUNT(*) FROM reports WHERE status='Pending'")
+pending = cursor.fetchone()[0]
+
+cursor.execute("SELECT COUNT(*) FROM reports WHERE status='Rescued'")
+rescued = cursor.fetchone()[0]
+
+conn.close()
+
+# -----------------------------
+# UI METRICS (UNCHANGED STYLE)
+# -----------------------------
 col1, col2, col3 = st.columns(3)
 
 with col1:
-    st.metric(t["dashboard"]["total"], "0")
+    st.metric(t["dashboard"]["total"], total)
 
 with col2:
-    st.metric(t["dashboard"]["pending"], "0")
+    st.metric(t["dashboard"]["pending"], pending)
 
 with col3:
-    st.metric(t["dashboard"]["rescued"], "0")
+    st.metric(t["dashboard"]["rescued"], rescued)
 
 st.write("---")
 

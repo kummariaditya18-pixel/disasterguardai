@@ -1,172 +1,58 @@
-LANGUAGES = ["English", "Hindi", "Telugu"]
+# utils/lang.py
 
 translations = {
-
-    # ==================================================
-    # ENGLISH
-    # ==================================================
     "English": {
-        "title": "DisasterGuard AI",
-        "welcome": "Welcome to Disaster Management System",
-        "system": "System Active",
-
         "menu": {
             "report": "Report Disaster",
-            "map": "Live Map",
-            "tracking": "Tracking",
-            "shelters": "Shelters",
-            "volunteers": "Volunteers",
-            "assistant": "AI Assistant",
-            "admin": "Admin Panel",
-            "vol_list": "Volunteer List",
-            "reports": "Reports"
+            "view_reports": "View Reports"
         },
 
-        "status": {
-            "pending": "Pending",
-            "in_progress": "In Progress",
-            "rescued": "Rescued"
-        },
-
-        "dashboard": {
-            "total": "Total Reports",
-            "pending": "Pending Reports",
-            "rescued": "Rescued Reports",
-            "recent": "Recent Reports"
-        },
-
-        "forms": {
-            "name": "Name",
-            "phone": "Phone",
-            "location": "Location",
-            "description": "Description",
-            "skill": "Skill",
-            "required": "Required Field",
-            "success": "Operation Successful",
-            "error": "Operation Failed"
-        },
-
-        "volunteer": {
-            "medical": "Medical",
-            "rescue": "Rescue",
-            "food": "Food Distribution",
-            "transport": "Transport"
-        },
-
-        "ai": {
-            "chat": "Ask a disaster-related question"
-        }
+        # ---------------- REPORT PAGE ----------------
+        "welcome": "Report emergencies quickly and help others stay safe.",
+        
+        # ---------------- VIEW REPORT PAGE ----------------
+        "no_reports": "⚠️ No disaster reports found.",
+        "total_reports": "Total Reports: ",
+        "filter_reports": "Filter Reports",
+        "filter_label": "Filter by Disaster Type",
+        "db_error": "❌ Database Error: ",
+        "debug_title": "🔍 Debug Table Structure",
+        "no_table": "No table structure found"
     },
 
-    # ==================================================
-    # HINDI
-    # ==================================================
-    "Hindi": {
-        "title": "डिजास्टरगार्ड AI",
-        "welcome": "आपदा प्रबंधन प्रणाली में आपका स्वागत है",
-        "system": "सिस्टम सक्रिय",
+    # ================= TELUGU =================
+    "Telugu": {
+        "menu": {
+            "report": "విపత్తు నివేదించండి",
+            "view_reports": "నివేదికలు చూడండి"
+        },
 
+        "welcome": "అత్యవసర పరిస్థితులను త్వరగా నివేదించండి.",
+
+        "no_reports": "⚠️ ఎటువంటి విపత్తు నివేదికలు లేవు.",
+        "total_reports": "మొత్తం నివేదికలు: ",
+        "filter_reports": "ఫిల్టర్ నివేదికలు",
+        "filter_label": "విపత్తు రకం ద్వారా ఫిల్టర్ చేయండి",
+        "db_error": "❌ డేటాబేస్ లోపం: ",
+        "debug_title": "🔍 డేటాబేస్ నిర్మాణం",
+        "no_table": "టేబుల్ నిర్మాణం లేదు"
+    },
+
+    # ================= HINDI =================
+    "Hindi": {
         "menu": {
             "report": "आपदा रिपोर्ट करें",
-            "map": "लाइव मैप",
-            "tracking": "बचाव ट्रैकिंग",
-            "shelters": "आश्रय स्थल",
-            "volunteers": "स्वयंसेवक",
-            "assistant": "AI सहायक",
-            "admin": "एडमिन पैनल",
-            "vol_list": "स्वयंसेवक सूची",
-            "reports": "रिपोर्ट्स"
+            "view_reports": "रिपोर्ट देखें"
         },
 
-        "status": {
-            "pending": "लंबित",
-            "in_progress": "कार्य प्रगति पर",
-            "rescued": "बचाया गया"
-        },
+        "welcome": "आपातकालीन स्थिति को जल्दी रिपोर्ट करें।",
 
-        "dashboard": {
-            "total": "कुल रिपोर्ट",
-            "pending": "लंबित रिपोर्ट",
-            "rescued": "बचाई गई रिपोर्ट",
-            "recent": "हाल की रिपोर्ट"
-        },
-
-        "forms": {
-            "name": "नाम",
-            "phone": "फ़ोन",
-            "location": "स्थान",
-            "description": "विवरण",
-            "skill": "कौशल",
-            "required": "आवश्यक फ़ील्ड",
-            "success": "सफल",
-            "error": "त्रुटि"
-        },
-
-        "volunteer": {
-            "medical": "चिकित्सा",
-            "rescue": "बचाव",
-            "food": "भोजन वितरण",
-            "transport": "परिवहन"
-        },
-
-        "ai": {
-            "chat": "आपदा से संबंधित प्रश्न पूछें"
-        }
-    },
-
-    # ==================================================
-    # TELUGU
-    # ==================================================
-    "Telugu": {
-        "title": "డిజాస్టర్ గార్డ్ AI",
-        "welcome": "విపత్తు నిర్వహణ వ్యవస్థకు స్వాగతం",
-        "system": "సిస్టమ్ యాక్టివ్",
-
-        "menu": {
-            "report": "విపత్తును నివేదించండి",
-            "map": "లైవ్ మ్యాప్",
-            "tracking": "రక్షణ ట్రాకింగ్",
-            "shelters": "ఆశ్రయ కేంద్రాలు",
-            "volunteers": "వాలంటీర్లు",
-            "assistant": "AI సహాయకుడు",
-            "admin": "అడ్మిన్ ప్యానెల్",
-            "vol_list": "వాలంటీర్ జాబితా",
-            "reports": "రిపోర్టులు"
-        },
-
-        "status": {
-            "pending": "పెండింగ్",
-            "in_progress": "పనిలో ఉంది",
-            "rescued": "రక్షించబడింది"
-        },
-
-        "dashboard": {
-            "total": "మొత్తం నివేదికలు",
-            "pending": "పెండింగ్ నివేదికలు",
-            "rescued": "రక్షించబడిన నివేదికలు",
-            "recent": "ఇటీవలి నివేదికలు"
-        },
-
-        "forms": {
-            "name": "పేరు",
-            "phone": "ఫోన్",
-            "location": "ప్రాంతం",
-            "description": "వివరణ",
-            "skill": "నైపుణ్యం",
-            "required": "తప్పనిసరి ఫీల్డ్",
-            "success": "విజయం",
-            "error": "లోపం"
-        },
-
-        "volunteer": {
-            "medical": "వైద్య",
-            "rescue": "రక్షణ",
-            "food": "ఆహార పంపిణీ",
-            "transport": "రవాణా"
-        },
-
-        "ai": {
-            "chat": "విపత్తుకు సంబంధించిన ప్రశ్న అడగండి"
-        }
+        "no_reports": "⚠️ कोई आपदा रिपोर्ट नहीं मिली।",
+        "total_reports": "कुल रिपोर्ट: ",
+        "filter_reports": "रिपोर्ट फ़िल्टर करें",
+        "filter_label": "आपदा प्रकार के अनुसार फ़िल्टर करें",
+        "db_error": "❌ डेटाबेस त्रुटि: ",
+        "debug_title": "🔍 टेबल संरचना",
+        "no_table": "कोई टेबल संरचना नहीं मिली"
     }
 }
