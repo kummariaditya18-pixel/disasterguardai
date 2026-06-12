@@ -1,7 +1,6 @@
 import streamlit as st
 import sqlite3
 import pandas as pd
-
 from utils.lang import translations
 
 # ---------------- LANGUAGE ----------------
@@ -12,55 +11,51 @@ if lang not in translations:
 
 t = translations[lang]
 
-# ---------------- TITLE ----------------
-st.title("📋 " + t["menu"]["reports"])
+# ---------------- SAFE TRANSLATION HELPER ----------------
+def tr(key, fallback):
+    return t.get("menu", {}).get(key, fallback)
 
-# ---------------- DB ----------------
+# ---------------- TITLE (FIXED ONLY) ----------------
+st.title("📋 " + tr("reports", "View Reports"))
+
+# ---------------- DATABASE ----------------
 conn = sqlite3.connect("disasterguard.db", check_same_thread=False)
+cursor = conn.cursor()
 
+# ---------------- LOAD DATA ----------------
 try:
     query = "SELECT * FROM reports ORDER BY tracking_id DESC"
     df = pd.read_sql_query(query, conn)
 
     if df.empty:
-        st.warning("⚠️ " + t["status"]["pending"])
+        st.warning("⚠️ No disaster reports found.")
     else:
-
-        st.success(f"{t['dashboard']['total']}: {len(df)}")
-
+        st.success(f"✅ Total Reports: {len(df)}")
         st.dataframe(df, use_container_width=True)
 
         # ---------------- FILTER ----------------
-        st.markdown("### 🔍 " + t["menu"]["reports"])
+        st.markdown("### 🔍 Filter Reports")
 
         disaster_types = ["All"] + sorted(df["disaster_type"].dropna().unique().tolist())
-
-        selected = st.selectbox(
-            "Filter",
-            disaster_types,
-            index=0
-        )
+        selected = st.selectbox("Filter by Disaster Type", disaster_types)
 
         if selected != "All":
             st.dataframe(df[df["disaster_type"] == selected], use_container_width=True)
 
 except Exception as e:
-    st.error("❌ Database Error: " + str(e))
+    st.error(f"❌ Database Error: {e}")
 
-# ---------------- DEBUG ----------------
+# ---------------- DEBUG TABLE ----------------
 with st.expander("🔍 Debug Table Structure", expanded=False):
-    cursor = conn.cursor()
     cursor.execute("PRAGMA table_info(reports)")
     columns = cursor.fetchall()
 
     if columns:
         st.table(
-            pd.DataFrame(
-                columns,
-                columns=["cid", "name", "type", "notnull", "default", "pk"]
-            )
+            pd.DataFrame(columns, columns=["cid", "name", "type", "notnull", "default", "pk"])
         )
     else:
-        st.warning("No table structure found")
+        st.warning("No table structure found.")
 
+# ---------------- CLOSE CONNECTION ----------------
 conn.close()
