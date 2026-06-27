@@ -1,0 +1,47 @@
+stages:
+  - lint
+  - type_check
+  - test
+  - security
+  - release
+
+variables:
+  PIP_CACHE_DIR: "$CI_PROJECT_DIR/.cache/pip"
+
+cache:
+  paths:
+    - .cache/pip
+
+before_script:
+  - python --version
+  - python -m pip install --upgrade pip
+  - python -m pip install -r requirements.txt
+  - python -m pip install -r requirements-dev.txt
+
+lint:
+  stage: lint
+  script:
+    - python -m ruff check .
+
+type_check:
+  stage: type_check
+  script:
+    - python -m mypy .
+
+test:
+  stage: test
+  script:
+    - python -m pytest -v
+
+security:
+  stage: security
+  script:
+    - python -m bandit -r . -ll
+  allow_failure: true
+
+release:
+  stage: release
+  script:
+    - echo "Release stage completed"
+  only:
+    - main

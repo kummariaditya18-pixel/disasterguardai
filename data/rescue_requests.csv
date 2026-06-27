@@ -1,0 +1,12 @@
+tracking_id,name,location,status,disaster_type,severity,description,image_path,reported_at
+RES-2827,res123,hyderabad,Pending,,,,,
+RES-20260609-6974,teja,hyd,Pending,Storm,Medium,large storm destroyed the buildings in my area and my area is severly damaged,data/images\RES-20260609-6974_WhatsApp Image 2026-02-22 at 2.29.10 PM.jpeg,2026-06-09 16:21:59
+RES-20260609-5355,teja,hyd,Pending,Storm,Medium,storm,data/images\RES-20260609-5355_WhatsApp Image 2026-02-22 at 2.29.10 PM.jpeg,2026-06-09 16:31:47
+RES-20260609-2756,teja,hyd,Pending,Storm,Medium,storm,data/images\RES-20260609-2756_WhatsApp Image 2026-02-22 at 2.29.10 PM.jpeg,2026-06-09 16:32:23
+RES-20260609-9496,teja,hyd,Pending,Storm,Medium,storm,data/images\RES-20260609-9496_WhatsApp Image 2026-02-22 at 2.29.10 PM.jpeg,2026-06-09 16:32:26
+RES-20260609-2924,teja,hyd,Pending,Storm,Medium,storm,data/images\RES-20260609-2924_WhatsApp Image 2026-02-22 at 2.29.10 PM.jpeg,2026-06-09 16:32:26
+RES-20260609-9196,teja,hyd,Pending,Storm,Medium,storm,data/images\RES-20260609-9196_WhatsApp Image 2026-02-22 at 2.29.10 PM.jpeg,2026-06-09 16:32:27
+RES-20260609-4299,teja,hyd,Pending,Storm,Medium,storm,data/images\RES-20260609-4299_WhatsApp Image 2026-02-22 at 2.29.10 PM.jpeg,2026-06-09 16:32:29
+RES-20260609-2020,teja,hyd,Pending,Storm,Medium,storm,data/images\RES-20260609-2020_WhatsApp Image 2026-02-22 at 2.29.10 PM.jpeg,2026-06-09 16:32:31
+RES-20260609-6525,aditya,WARANGAL,Pending,Landslide,Low,OPPJDWBNKJWCBJ,,
+RES-20260609-4454,ADITYA,MUMBAI,Rescued,Flood,Low,BCWNCKWBVOE BEJUV,data/images\RES-20260609-4454_WhatsApp Image 2026-02-22 at 2.29.09 PM (1).jpeg,2026-06-09 21:23:45
